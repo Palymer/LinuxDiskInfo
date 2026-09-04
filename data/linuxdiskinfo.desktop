@@ -1,0 +1,15 @@
+[Desktop Entry]
+Type=Application
+Name=Linux Disk Info
+Name[ru]=Linux Disk Info
+GenericName=Drive Health Monitor
+GenericName[ru]=Монитор здоровья дисков
+Comment=SMART, temperature, wear and live I/O for Linux drives
+Comment[ru]=SMART, температура, износ и живой I/O дисков Linux
+Exec=linuxdiskinfo --gui
+Icon=linuxdiskinfo
+Terminal=false
+Categories=System;Monitor;HardwareSettings;
+Keywords=SMART;disk;SSD;NVMe;HDD;health;CrystalDiskInfo;температура;диск;
+StartupNotify=true
+DBusActivatable=false

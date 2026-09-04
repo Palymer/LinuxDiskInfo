@@ -1,0 +1,129 @@
+/* Linux Disk Info — Adwaita extras */
+
+.hero {
+  padding: 18px 20px;
+}
+
+.pad-card {
+  padding: 14px 16px;
+}
+
+.health-badge {
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+}
+
+.temp-value {
+  font-size: 28px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.metric-tile {
+  padding: 12px 14px;
+  min-width: 118px;
+}
+
+.metric-value {
+  font-size: 18px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.metric-cap {
+  font-size: 11px;
+}
+
+.metric-sub {
+  font-size: 11px;
+}
+
+.grade-excellent {
+  color: #2ec27e;
+}
+
+.grade-good {
+  color: #3584e4;
+}
+
+.grade-caution {
+  color: #e5a50a;
+}
+
+.grade-bad {
+  color: #e01b24;
+}
+
+.grade-unknown {
+  opacity: 0.7;
+}
+
+.advice-row {
+  padding: 4px 0;
+}
+
+.advice-pill {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 2px 8px;
+  border-radius: 999px;
+  min-width: 72px;
+}
+
+.advice-critical {
+  background-color: alpha(#e01b24, 0.18);
+  color: #e01b24;
+}
+
+.advice-warning {
+  background-color: alpha(#e5a50a, 0.18);
+  color: #c64600;
+}
+
+.advice-info {
+  background-color: alpha(#3584e4, 0.16);
+  color: #1c71d8;
+}
+
+.attr-row {
+  padding: 8px 12px;
+  border-bottom: 1px solid alpha(@borders, 0.6);
+}
+
+.attr-row:last-child {
+  border-bottom: none;
+}
+
+.status-badge {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 1px 8px;
+  border-radius: 999px;
+  min-width: 64px;
+}
+
+.status-ok {
+  color: #2ec27e;
+}
+
+.status-caution {
+  color: #e5a50a;
+}
+
+.status-bad {
+  color: #e01b24;
+}
+
+.status-info {
+  color: #3584e4;
+}
+
+.drive-row {
+  padding: 2px 0;
+}
+
+.caption {
+  font-size: 12px;
+}

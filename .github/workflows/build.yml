@@ -1,0 +1,94 @@
+name: Build binaries
+
+on:
+  push:
+    branches: [main, master]
+    tags: ["v*"]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: write
+
+jobs:
+  drop-unreachable-commits:
+    name: Drop Actions refs to rewritten history
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Delete workflow runs that pin rewritten commits
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const drop = new Set([
+              '288c3afab0d5fcf3faae3ae9a32b2b58fbaba525',
+              '9772b385e5daaf6998a42a441d79a9ed062641c4',
+            ]);
+            const runs = await github.paginate(
+              github.rest.actions.listWorkflowRunsForRepo,
+              { owner, repo, per_page: 100 }
+            );
+            for (const run of runs) {
+              if (!drop.has(run.head_sha) || run.id === context.runId) continue;
+              try {
+                await github.rest.actions.deleteWorkflowRun({
+                  owner, repo, run_id: run.id,
+                });
+                console.log('deleted run', run.id, run.head_sha);
+              } catch (err) {
+                console.log('skip run', run.id, err.status || err.message);
+              }
+            }
+
+  linux:
+    name: Linux x86_64
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install GTK / GI runtime
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            python3 \
+            python3-venv \
+            python3-pip \
+            python3-gi \
+            python3-gi-cairo \
+            gir1.2-gtk-4.0 \
+            gir1.2-adw-1 \
+            libgtk-4-1 \
+            libadwaita-1-0 \
+            binutils
+
+      - name: Create venv with system PyGObject
+        run: |
+          python3 -m venv --system-site-packages .venv
+          .venv/bin/pip install -U pip
+          .venv/bin/pip install pyinstaller pyinstaller-hooks-contrib
+
+      - name: Build tarball
+        run: bash scripts/build-binary.sh
+
+      - name: Smoke test CLI
+        run: |
+          ./dist/linuxdiskinfo/linuxdiskinfo --cli --lang en | head -n 20
+          ./dist/linuxdiskinfo/linuxdiskinfo --version
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: linuxdiskinfo-linux-x86_64
+          path: dist/linuxdiskinfo-*-linux-*.tar.gz
+          if-no-files-found: error
+
+      - name: Attach to GitHub Release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/linuxdiskinfo-*-linux-*.tar.gz
+          generate_release_notes: true
